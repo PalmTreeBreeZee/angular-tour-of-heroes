@@ -15,6 +15,7 @@ import { RouterLink } from '@angular/router';
 })
 export class HeroesComponent implements OnInit {
   heroes: Hero[] = [];
+  
 
   constructor(private heroService: HeroService){}
   
@@ -26,10 +27,5 @@ export class HeroesComponent implements OnInit {
     this.heroService.getHeroes()
         .subscribe(heroes => this.heroes = heroes);
   }
-
-  // getDetails(): void {
-  //   this.heroDetail.getDetails()
-  //       .subscribe()
-  // }
 }
  
