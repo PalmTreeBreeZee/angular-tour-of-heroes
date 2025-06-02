@@ -1,0 +1,33 @@
+<h2>Cities</h2>
+<div class="onSelect">
+  <ul class="cities">
+    <li *ngFor="let city of cities">
+      <button
+        [class.selected]="city === selectedCity"
+        type="button"
+        routerLink="city/{{ city.id }}"
+      >
+        <span class="badge">{{ city.id }}</span>
+        <span class="name">{{ city.name }}</span>
+      </button>
+      <a
+        href="#"
+        role="button"
+        (click)="removeCity(city.id); $event.preventDefault()"
+        >x</a
+      >
+    </li>
+  </ul>
+</div>
+
+<div>
+  <label for="new-city">City Name: </label>
+  <input id="new-city" #cityName />
+  <button
+    type="button"
+    class="add-button"
+    (click)="add(cityName.value); cityName.value = ''"
+  >
+    Add City
+  </button>
+</div>

@@ -7,8 +7,8 @@ import { CommonModule, NgFor, NgIf } from '@angular/common';
   templateUrl: './messages.component.html',
   styleUrl: './messages.component.css',
   standalone: true,
-  imports:[NgFor, NgIf, CommonModule]
+  imports: [NgFor, NgIf, CommonModule],
 })
 export class MessagesComponent {
-  constructor(public messageService: MessageService){}
+  constructor(public messageService: MessageService) {}
 }

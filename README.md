@@ -25,3 +25,24 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## NOTES FOR WHAT IS NEXT
+
+\*\*For completion [ ✓ ]
+
+- I need to make a search component that searches the cities and displays the city that you click ons hero details
+  - Create a component to hold a singular city called city-detail ✓
+  - Create a path to the city-detail component ✓
+  - Create a search component for cities ✓
+  - Display the search component on the dashboard ✓
+  - Display the hero details that go with the city on the city-detail component ✓
+- I need to make a way to edit the cities ✓
+  - create a service to "PUT" cities for changes ✓
+  - on the component for a city that was created I want to be able to CHANGE THE NAME. ✓
+- I need to make a way to delete the cities ✓
+  - create a service to "DELETE" cities for changes ✓
+  - on the component for a city that was created I want to be able to DELETE THE CITY.✓
+  - I need a way the handle the heroes without a city ✓
+- I need to make a way to add a city ✓
+  - create a service to "ADD" cities for changes ✓
+  - on the component for a cities that was created I want to be able to CREATE A NEW CITY. ✓

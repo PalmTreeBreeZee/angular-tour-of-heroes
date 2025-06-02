@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Hero } from '../hero';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { HeroService } from '../hero.service';
@@ -20,7 +20,7 @@ export class HeroesComponent implements OnInit {
   constructor(private heroService: HeroService){}
   
   ngOnInit(): void {
-    this.getHeroes();  
+    this.getHeroes(); 
   }
 
   getHeroes(): void {
@@ -31,5 +31,20 @@ export class HeroesComponent implements OnInit {
   onSelect(hero: Hero): void {
     this.selectedHero = hero;
   }
+
+  add(name: string): void {
+  name = name.trim();
+  if (!name) { return; }
+  this.heroService.addHero({ name } as Hero)
+    .subscribe(hero => {
+      this.heroes.push(hero);
+    });
+  }
+
+  delete(hero: Hero): void {
+  this.heroes = this.heroes.filter(h => h !== hero);
+  this.heroService.deleteHero(hero.id).subscribe();
+  //change this to the details component
+}
 }
  

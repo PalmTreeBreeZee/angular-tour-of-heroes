@@ -1,12 +1,30 @@
-<h2>My Heros</h2>
+<h2 *ngIf="heroes != null">My Heroes</h2>
 <div class="onSelect">
-    <ul class="heroes">
-        <li *ngFor="let hero of heroes">
-            <button [class.selected]="hero === selectedHero" type="button" (click)="onSelect(hero)">
-                <span class="badge">{{hero.id}}</span>
-                <span class="name">{{hero.name}}</span>
-            </button>
-        </li>
-    </ul>
-    <app-hero-detail [hero]="selectedHero" style="margin-right: 100px;"></app-hero-detail>   
+  <ul class="heroes">
+    <li *ngFor="let hero of heroes">
+      <button
+        [class.selected]="hero === selectedHero"
+        type="button"
+        (click)="onSelect(hero)"
+      >
+        <span class="badge">{{ hero.id }}</span>
+        <span class="name">{{ hero.name }}</span>
+      </button>
+      <a href="#" role="button" (click)="delete(hero); $event.preventDefault()"
+        >x</a
+      >
+    </li>
+  </ul>
+  <app-hero-detail [hero]="selectedHero"></app-hero-detail>
+</div>
+<div>
+  <label for="new-hero">Hero name: </label>
+  <input id="new-hero" #heroName />
+  <button
+    type="button"
+    class="add-button"
+    (click)="add(heroName.value); heroName.value = ''"
+  >
+    Add hero
+  </button>
 </div>
