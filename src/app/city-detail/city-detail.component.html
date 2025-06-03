@@ -11,7 +11,7 @@
     <h3>List of Heroes in {{ city.name }}:</h3>
     <button
       *ngFor="let hero of getHeroesByCity(city.id)"
-      (click)="removeHero(hero.id)"
+      (click)="removeHero(hero)"
     >
       {{ hero.name }}
     </button>
@@ -21,7 +21,7 @@
     <h3>List of Heroes that can be assigned:</h3>
     <button
       *ngFor="let hero of getHeroesNotInCity(city.id)"
-      (click)="addHero(hero.id)"
+      (click)="addHero(hero)"
     >
       {{ hero.name }}
     </button>

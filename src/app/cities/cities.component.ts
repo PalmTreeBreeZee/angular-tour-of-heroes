@@ -42,28 +42,31 @@ export class CitiesComponent implements OnInit {
   }
 
   add(name: string): void {
-    name = name.trim();
-    if (!name) {
+    if (name === '' || name === null || name === undefined || name.length < 0) {
       return;
     }
+
+    name = name.trim();
+
     this.heroService.addCity({ name } as City).subscribe((city) => {
       this.cities.push(city);
+      this.getCities();
+      this.getHeroes();
     });
   }
 
-  removeCity(id: number): void {
-    const city = this.cities.filter((city) => city.id === id);
+  removeCity(city: City): void {
     this.heroes.filter((hero) => {
-      for (let i = 0; i < city[0].heroes.length; i++) {
-        if (city[0].heroes[i] === hero.id) {
+      for (let i = 0; i < city.heroes.length; i++) {
+        if (city.heroes[i] === hero.id) {
           hero.city = null;
         }
       }
       this.heroService.updateHero(hero).subscribe();
     });
 
-    this.heroService.deleteCity(id).subscribe();
-    this.getCities();
-    this.getHeroes();
+    this.heroService.deleteCity(city.id).subscribe(() => {
+      this.getCities(), this.getHeroes();
+    });
   }
 }

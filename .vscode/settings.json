@@ -1,7 +1,9 @@
 {
-    "prettier.useTabs": true,
-    "prettier.vueIndentScriptAndStyle": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "notebook.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
+  "prettier.useTabs": true,
+  "prettier.vueIndentScriptAndStyle": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "notebook.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "prettier.tabWidth": 4,
+  "prettier.printWidth": 100
 }

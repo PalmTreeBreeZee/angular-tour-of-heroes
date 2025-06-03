@@ -42,12 +42,19 @@ export class CityDetailComponent implements OnInit {
   }
 
   saveCity(): void {
-    if (!this.city) {
+    if (
+      this.city == undefined ||
+      this.city.name == null ||
+      this.city.name == ''
+    ) {
       console.error('There is no City!!!');
       return;
     }
 
-    this.heroService.updateCityHeroes(this.city).subscribe({});
+    this.heroService.updateCityHeroes(this.city).subscribe(() => {
+      this.getCity();
+      this.getHeroes();
+    });
   }
 
   getHeroesByCity(cityId: number): Hero[] {
@@ -66,14 +73,15 @@ export class CityDetailComponent implements OnInit {
     return this.heroes.filter((hero) => hero.city !== cityId && !hero.city);
   }
 
-  removeHero(heroId: number): void {
-    if (!this.city || !this.city.heroes) return;
-    const hero = this.heroes.find((h) => h.id === heroId);
+  removeHero(hero: Hero): void {
+    if (this.city === undefined || this.city.heroes === undefined) {
+      return;
+    }
 
-    this.city.heroes = this.city.heroes.filter((id) => id !== heroId);
+    this.city.heroes = this.city.heroes.filter((id) => id !== hero.id);
 
-    if (!hero) {
-      console.warn(`Hero with ID ${heroId} not found`);
+    if (hero === undefined) {
+      console.warn(`Hero with ID ${hero} not found`);
       return;
     }
 
@@ -82,15 +90,15 @@ export class CityDetailComponent implements OnInit {
     this.heroService.updateHero(hero).subscribe({
       next: () => {
         this.saveCity();
+        this.getHeroes();
+        this.getCity();
       },
     });
   }
 
-  addHero(heroId: number): void {
-    const hero = this.heroes.find((h) => h.id === heroId);
-
-    if (!hero) {
-      console.warn(`Hero with ID ${heroId} not found`);
+  addHero(hero: Hero): void {
+    if (hero === null || hero === undefined) {
+      console.warn(`Hero with ID ${hero} not found`);
       return;
     }
 
@@ -99,6 +107,8 @@ export class CityDetailComponent implements OnInit {
     this.heroService.updateHero(hero).subscribe({
       next: () => {
         this.saveCity();
+        this.getCity();
+        this.getHeroes();
       },
     });
   }

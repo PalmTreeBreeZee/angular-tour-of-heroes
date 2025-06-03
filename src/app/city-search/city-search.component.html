@@ -3,7 +3,7 @@
   <input #searchBox id="search-box" (input)="search(searchBox.value)" />
   <ul class="search-result">
     <li *ngFor="let city of cities$ | async">
-      <a routerLink="city/{{ city.id }}">
+      <a routerLink="/city/{{ city.id }}">
         {{ city.name }}
       </a>
     </li>

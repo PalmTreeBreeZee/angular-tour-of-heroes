@@ -10,6 +10,6 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'detail/:id', component: HeroDetailComponent },
   { path: 'cities', component: CitiesComponent },
-  { path: 'cities/city/:id', component: CityDetailComponent },
+  { path: 'city/:id', component: CityDetailComponent },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
 ];

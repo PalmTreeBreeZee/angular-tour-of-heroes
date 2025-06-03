@@ -5,7 +5,7 @@
       <button
         [class.selected]="city === selectedCity"
         type="button"
-        routerLink="city/{{ city.id }}"
+        routerLink="/city/{{ city.id }}"
       >
         <span class="badge">{{ city.id }}</span>
         <span class="name">{{ city.name }}</span>
@@ -13,7 +13,7 @@
       <a
         href="#"
         role="button"
-        (click)="removeCity(city.id); $event.preventDefault()"
+        (click)="removeCity(city); $event.preventDefault()"
         >x</a
       >
     </li>
