@@ -32,13 +32,11 @@ export class CityDetailComponent implements OnInit {
     const param = this.route.snapshot.paramMap.get('id');
     const id = Number(param);
 
-    if (param == null) {
+    if (id === undefined || param === null) {
       return;
-    } else if (isNaN(id) || id <= 0) {
-      return;
+    } else if (id !== undefined && param !== null) {
+      this.heroService.getCity(id).subscribe((city) => (this.city = city));
     }
-
-    this.heroService.getCity(id).subscribe((city) => (this.city = city));
   }
 
   saveCity(): void {
@@ -97,7 +95,7 @@ export class CityDetailComponent implements OnInit {
   }
 
   addHero(hero: Hero): void {
-    if (hero === null || hero === undefined) {
+    if (hero === null || hero === undefined || hero.name === '') {
       console.warn(`Hero with ID ${hero} not found`);
       return;
     }

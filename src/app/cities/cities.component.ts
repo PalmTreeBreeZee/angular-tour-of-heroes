@@ -62,11 +62,13 @@ export class CitiesComponent implements OnInit {
           hero.city = null;
         }
       }
+
       this.heroService.updateHero(hero).subscribe();
     });
 
     this.heroService.deleteCity(city.id).subscribe(() => {
-      this.getCities(), this.getHeroes();
+      this.getCities();
+      this.getHeroes();
     });
   }
 }

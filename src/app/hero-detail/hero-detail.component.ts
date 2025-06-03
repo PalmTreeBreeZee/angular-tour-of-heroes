@@ -16,6 +16,7 @@ import { HeroService } from '../hero.service';
 export class HeroDetailComponent implements OnInit {
   @Input() hero?: Hero;
   cities: City[] = [];
+  heroes: Hero[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -28,21 +29,15 @@ export class HeroDetailComponent implements OnInit {
     this.getCities();
   }
 
-  getHero(): void {
+  getHero(heroId?: number): void {
     const param = this.route.snapshot.paramMap.get('id');
     const id = Number(param);
 
-    if (param === null) {
-      console.warn('No id parameter found in route');
-      return;
+    if (heroId === undefined) {
+      this.heroService.getHero(id).subscribe((hero) => (this.hero = hero));
+    } else if (heroId !== undefined) {
+      this.heroService.getHero(heroId).subscribe((hero) => (this.hero = hero));
     }
-
-    if (isNaN(id) || id <= 0) {
-      console.warn('Invalid hero id', param);
-      return;
-    }
-
-    this.heroService.getHero(id).subscribe((hero) => (this.hero = hero));
   }
 
   getCities(): void {

@@ -15,7 +15,9 @@
       >
     </li>
   </ul>
-  <app-hero-detail [hero]="selectedHero"></app-hero-detail>
+  <p *ngIf="selectedHero">
+    <app-hero-detail [hero]="selectedHero"></app-hero-detail>
+  </p>
 </div>
 <div>
   <label for="new-hero">Hero name: </label>
