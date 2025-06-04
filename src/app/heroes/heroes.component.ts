@@ -35,6 +35,7 @@ export class HeroesComponent implements OnInit {
   }
 
   onSelect(hero: Hero): void {
+    console.log(this.selectedHero);
     this.selectedHero = hero;
   }
 
@@ -53,6 +54,7 @@ export class HeroesComponent implements OnInit {
 
   delete(hero: Hero): void {
     this.heroService.deleteHero(hero.id).subscribe(() => {
+      this.selectedHero = undefined;
       this.getHeroes();
     });
   }

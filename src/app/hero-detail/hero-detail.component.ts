@@ -34,6 +34,9 @@ export class HeroDetailComponent implements OnInit {
     const id = Number(param);
 
     if (heroId === undefined) {
+      if (id === 0) {
+        return;
+      }
       this.heroService.getHero(id).subscribe((hero) => (this.hero = hero));
     } else if (heroId !== undefined) {
       this.heroService.getHero(heroId).subscribe((hero) => (this.hero = hero));
@@ -54,7 +57,6 @@ export class HeroDetailComponent implements OnInit {
     }
 
     this.heroService.updateHero(this.hero).subscribe(() => {
-      this.goBack();
       this.getHero();
       this.getCities();
     });

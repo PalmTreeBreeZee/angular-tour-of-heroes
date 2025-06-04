@@ -57,18 +57,22 @@ export class CitiesComponent implements OnInit {
 
   removeCity(city: City): void {
     this.heroes.filter((hero) => {
-      for (let i = 0; i < city.heroes.length; i++) {
-        if (city.heroes[i] === hero.id) {
-          hero.city = null;
+      if (city.heroes !== undefined) {
+        for (let i = 0; i < city.heroes.length + 1; i++) {
+          if (city.heroes[i] === hero.id) {
+            hero.city = null;
+          }
         }
       }
 
-      this.heroService.updateHero(hero).subscribe();
-    });
-
-    this.heroService.deleteCity(city.id).subscribe(() => {
-      this.getCities();
-      this.getHeroes();
+      this.heroService.updateHero(hero).subscribe({
+        next: () => {
+          this.heroService.deleteCity(city.id).subscribe(() => {
+            this.getCities();
+            this.getHeroes();
+          });
+        },
+      });
     });
   }
 }

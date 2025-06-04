@@ -15,7 +15,9 @@ import { FormsModule } from '@angular/forms';
 })
 export class CityDetailComponent implements OnInit {
   @Input() city?: City;
+  cities: City[] = [];
   heroes: Hero[] = [];
+  hero?: Hero;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,14 +30,18 @@ export class CityDetailComponent implements OnInit {
     this.getHeroes();
   }
 
-  getCity(): void {
+  getCity(cityId?: number): void {
     const param = this.route.snapshot.paramMap.get('id');
     const id = Number(param);
 
-    if (id === undefined || param === null) {
-      return;
-    } else if (id !== undefined && param !== null) {
+    if (cityId === undefined) {
+      if (id === 0) {
+        return;
+      }
+
       this.heroService.getCity(id).subscribe((city) => (this.city = city));
+    } else if (cityId !== undefined) {
+      this.heroService.getCity(cityId).subscribe((city) => (this.city = city));
     }
   }
 
@@ -87,26 +93,40 @@ export class CityDetailComponent implements OnInit {
 
     this.heroService.updateHero(hero).subscribe({
       next: () => {
-        this.saveCity();
-        this.getHeroes();
-        this.getCity();
+        this.heroService.updateCityHeroes(this.city!).subscribe({
+          next: () => {
+            this.getHeroes();
+            this.getCity();
+          },
+        });
       },
     });
   }
 
   addHero(hero: Hero): void {
+    const param = this.route.snapshot.paramMap.get('id');
+    const id = Number(param);
+
     if (hero === null || hero === undefined || hero.name === '') {
       console.warn(`Hero with ID ${hero} not found`);
       return;
     }
 
-    hero.city = this.city!.id;
+    if (this.city === undefined || this.city.heroes === undefined) {
+      return;
+    }
+
+    hero.city = id;
+    this.city.heroes.push(hero.id);
 
     this.heroService.updateHero(hero).subscribe({
       next: () => {
-        this.saveCity();
-        this.getCity();
-        this.getHeroes();
+        this.heroService.updateCityHeroes(this.city!).subscribe({
+          next: () => {
+            this.getCity();
+            this.getHeroes();
+          },
+        });
       },
     });
   }

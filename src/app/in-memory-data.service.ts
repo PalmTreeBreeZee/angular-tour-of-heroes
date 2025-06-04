@@ -30,9 +30,10 @@ export class InMemoryDataService implements InMemoryDbService {
   }
 
   genId(heroes: Hero[]): number {
-    //Break this up NO TERRINARY CODE
-    return heroes.length > 0
-      ? Math.max(...heroes.map((hero) => hero.id)) + 1
-      : 11;
+    if (heroes.length > 0) {
+      return Math.max(...heroes.map((hero) => hero.id)) + 1;
+    } else {
+      return 11;
+    }
   }
 }

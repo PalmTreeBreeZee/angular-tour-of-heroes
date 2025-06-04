@@ -15,7 +15,7 @@
       >
     </li>
   </ul>
-  <p *ngIf="selectedHero">
+  <p *ngIf="this.selectedHero != undefined">
     <app-hero-detail [hero]="selectedHero"></app-hero-detail>
   </p>
 </div>

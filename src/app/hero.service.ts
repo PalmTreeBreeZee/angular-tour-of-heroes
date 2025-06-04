@@ -81,10 +81,11 @@ export class HeroService {
       .pipe(tap((_) => this.log(`updated city id=${city.id}`)));
   }
 
-  updateHero(hero: Hero): Observable<any> {
-    return this.http.put(this.heroesUrl, hero, this.httpOptions).pipe(
+  updateHero(hero: Hero): Observable<Hero> {
+    const url = `${this.heroesUrl}/${hero.id}`;
+    return this.http.put<Hero>(url, hero, this.httpOptions).pipe(
       tap((_) => this.log(`updated hero id=${hero.id}`)),
-      catchError(this.handleError<any>('updateHero'))
+      catchError(this.handleError<Hero>('updateHero'))
     );
   }
 
@@ -126,7 +127,7 @@ export class HeroService {
 
     return this.http.get<City[]>(`${this.citiesUrl}/?name=${term}`).pipe(
       tap((x) => {
-        if (x.length) {
+        if (0 < x.length) {
           this.log(`Found cities matching ${term}`);
         } else {
           this.log(`Could not find a city matching ${term}`);
@@ -144,10 +145,10 @@ export class HeroService {
 
     return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`).pipe(
       tap((x) => {
-        if (x.length) {
+        if (0 < x.length) {
           this.log(`Found heroes matching ${term}`);
         } else {
-          this.log(`Could not find a city matching ${term}`);
+          this.log(`Could not find a hero matching ${term}`);
         }
       }),
       catchError(this.handleError<Hero[]>('searchHeroes', []))
