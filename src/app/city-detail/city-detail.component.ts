@@ -117,6 +117,7 @@ export class CityDetailComponent implements OnInit {
     }
 
     hero.city = id;
+
     this.city.heroes.push(hero.id);
 
     this.heroService.updateHero(hero).subscribe({

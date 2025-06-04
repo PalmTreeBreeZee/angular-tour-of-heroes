@@ -42,7 +42,7 @@ export class CitiesComponent implements OnInit {
   }
 
   add(name: string): void {
-    if (name === '' || name === null || name === undefined || name.length < 0) {
+    if (name === null || name === undefined || name.length <= 0) {
       return;
     }
 

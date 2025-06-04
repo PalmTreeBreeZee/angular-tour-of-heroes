@@ -37,6 +37,7 @@ export class HeroDetailComponent implements OnInit {
       if (id === 0) {
         return;
       }
+
       this.heroService.getHero(id).subscribe((hero) => (this.hero = hero));
     } else if (heroId !== undefined) {
       this.heroService.getHero(heroId).subscribe((hero) => (this.hero = hero));

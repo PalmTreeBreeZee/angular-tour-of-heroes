@@ -54,6 +54,7 @@ export class HeroService {
     }
 
     const url = `${this.citiesUrl}/${id}`;
+
     return this.http.get<City>(url).pipe(
       tap((_) => this.log(`fetched city id=${id}`)),
       catchError(this.handleError<City>(`getCity id=${id}`))
@@ -68,6 +69,7 @@ export class HeroService {
     }
 
     const url = `${this.heroesUrl}/${id}`;
+
     return this.http.get<Hero>(url).pipe(
       tap((_) => this.log(`fetched hero id=${id}`)),
       catchError(this.handleError<Hero>(`getHero id=${id}`))
@@ -76,6 +78,7 @@ export class HeroService {
 
   updateCityHeroes(city: City): Observable<City> {
     const url = `${this.citiesUrl}/${city.id}`;
+
     return this.http
       .put<City>(url, city, this.httpOptions)
       .pipe(tap((_) => this.log(`updated city id=${city.id}`)));
@@ -83,6 +86,7 @@ export class HeroService {
 
   updateHero(hero: Hero): Observable<Hero> {
     const url = `${this.heroesUrl}/${hero.id}`;
+
     return this.http.put<Hero>(url, hero, this.httpOptions).pipe(
       tap((_) => this.log(`updated hero id=${hero.id}`)),
       catchError(this.handleError<Hero>('updateHero'))
@@ -90,6 +94,8 @@ export class HeroService {
   }
 
   addCity(city: City): Observable<City> {
+    city.heroes = [];
+
     return this.http.post<City>(this.citiesUrl, city, this.httpOptions).pipe(
       tap((newCity) => this.log(`added city w/ id=${newCity.id}`)),
       catchError(this.handleError<City>('addCity'))
@@ -105,6 +111,7 @@ export class HeroService {
 
   deleteCity(id: number): Observable<City> {
     const url = `${this.citiesUrl}/${id}`;
+
     return this.http.delete<City>(url, this.httpOptions).pipe(
       tap((_) => this.log(`City at ${id} has been deleted`)),
       catchError(this.handleError<City>('deleteCity'))
@@ -113,6 +120,7 @@ export class HeroService {
 
   deleteHero(id: number): Observable<Hero> {
     const url = `${this.heroesUrl}/${id}`;
+
     return this.http.delete<Hero>(url, this.httpOptions).pipe(
       tap((_) => this.log(`deleted hero id=${id}`)),
       catchError(this.handleError<Hero>('deleteHero'))
