@@ -5,6 +5,7 @@ import { Location, NgFor, NgIf, UpperCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { HeroService } from '../hero.service';
+import { CityService } from '../city.service';
 
 @Component({
   selector: 'app-hero-detail',
@@ -21,7 +22,8 @@ export class HeroDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private heroService: HeroService,
-    private location: Location
+    private location: Location,
+    private cityService: CityService
   ) {}
 
   ngOnInit(): void {
@@ -45,7 +47,7 @@ export class HeroDetailComponent implements OnInit {
   }
 
   getCities(): void {
-    this.heroService.getCities().subscribe((cities) => (this.cities = cities));
+    this.cityService.getCities().subscribe((cities) => (this.cities = cities));
   }
 
   goBack(): void {
@@ -59,7 +61,6 @@ export class HeroDetailComponent implements OnInit {
 
     this.heroService.updateHero(this.hero).subscribe(() => {
       this.getHero();
-      this.getCities();
     });
   }
 }

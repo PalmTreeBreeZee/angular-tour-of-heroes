@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { HeroService } from '../hero.service';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { City } from '../city';
+import { CityService } from '../city.service';
 
 @Component({
   selector: 'app-city-search',
@@ -17,7 +17,7 @@ export class CitySearchComponent implements OnInit {
   cities$!: Observable<City[]>;
   private searchTerms = new Subject<string>();
 
-  constructor(private heroService: HeroService) {}
+  constructor(private cityService: CityService) {}
 
   search(term: string): void {
     this.searchTerms.next(term);
@@ -27,7 +27,7 @@ export class CitySearchComponent implements OnInit {
     this.cities$ = this.searchTerms.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((term: string) => this.heroService.searchCity(term))
+      switchMap((term: string) => this.cityService.searchCity(term))
     );
   }
 }
