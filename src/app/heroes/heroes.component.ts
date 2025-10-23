@@ -43,7 +43,7 @@ export class HeroesComponent implements OnInit {
   }
 
   add(name: string): void {
-    if (name === undefined) {
+    if (name === undefined || name === null) {
       return;
     }
 
@@ -55,8 +55,8 @@ export class HeroesComponent implements OnInit {
   }
 
   delete(hero: Hero): void {
-    this.cityAndHeroService.removeHeroFromCity(hero.id, () => {
-      this.heroService.deleteHero(hero).subscribe(() => {
+    this.cityAndHeroService.removeHeroFromCity(hero.id).subscribe(() => {
+      this.heroService.deleteHero(hero.id).subscribe(() => {
         this.selectedHero = undefined;
 
         this.getHeroes();

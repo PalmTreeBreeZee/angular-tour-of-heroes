@@ -9,7 +9,7 @@ import { catchError, tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class HeroService {
-  private heroesUrl = 'api/heroes';
+  private heroesUrl = 'http://localhost:5272/api/Heroes';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -28,7 +28,10 @@ export class HeroService {
     return (error: any): Observable<T> => {
       console.error(error);
       this.log(`${operation} failed: ${error.message}`);
-      return of(result as T);
+
+      const ofResult = of(result as T);
+
+      return ofResult;
     };
   }
 
@@ -44,6 +47,7 @@ export class HeroService {
     if (id === null || id === undefined) {
       this.log('getHero skipped: id is null or undefined');
       const hero = of(undefined);
+
       return hero;
     }
 
@@ -73,7 +77,7 @@ export class HeroService {
   addHero(name: string): Observable<Hero> {
     const hero = { name } as Hero;
 
-    hero.city = null;
+    hero.cityId = null;
 
     const heroObservable = this.http
       .post<Hero>(this.heroesUrl, hero, this.httpOptions)
@@ -85,11 +89,11 @@ export class HeroService {
     return heroObservable;
   }
 
-  deleteHero(hero: Hero): Observable<Hero> {
-    const url = `${this.heroesUrl}/${hero.id}`;
+  deleteHero(id: number): Observable<Hero> {
+    const url = `${this.heroesUrl}/${id}`;
 
     const deletedHero = this.http.delete<Hero>(url, this.httpOptions).pipe(
-      tap((_) => this.log(`deleted hero id=${hero.id}`)),
+      tap((_) => this.log(`deleted hero id=${id}`)),
       catchError(this.handleError<Hero>('deleteHero'))
     );
 
@@ -97,8 +101,11 @@ export class HeroService {
   }
 
   searchHeroes(term: string): Observable<Hero[]> {
+    term = term.trim();
+
     if (term === null || term === undefined || term === '') {
       const ofReturn = of([]);
+
       return ofReturn;
     }
 

@@ -2,7 +2,12 @@
   <h2>{{ hero.name | uppercase }}</h2>
   <div><span>Id: </span>{{ hero.id }}</div>
   <div *ngFor="let city of cities">
-    <div *ngIf="city.id === hero.city"><span>City: </span>{{ city.name }}</div>
+    <div *ngIf="city.id === hero.cityId">
+      <span>City: </span>
+      <a routerLink="/city/{{ city.id }}">
+        {{ city.name }}
+      </a>
+    </div>
   </div>
 
   <div>
