@@ -1,85 +1,80 @@
 import { Injectable } from '@angular/core';
 import { HeroService } from './hero.service';
-import { CityService } from './city.service';
+import { concatMap, Observable, of, map, forkJoin } from 'rxjs';
+import { Hero } from './hero';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CityandheroService {
-  constructor(
-    private cityService: CityService,
-    private heroService: HeroService
-  ) {}
+  constructor(private heroService: HeroService) {}
 
-  removeHeroFromCity(heroId: number, callback?: () => void): void {
-    this.heroService.getHero(heroId).subscribe((hero) => {
-      if (hero === undefined || hero.city === null) {
-        if (callback !== undefined) {
-          callback();
+  removeHeroFromCity(heroId: number): Observable<Hero | undefined> {
+    const removedHero = this.heroService.getHero(heroId).pipe(
+      concatMap((hero) => {
+        if (hero === undefined || hero.cityId === null) {
+          const ofReturn = of(hero);
+
+          return ofReturn;
         }
 
-        return;
-      }
+        hero.cityId = null;
+        const ofReturn = of(hero);
 
-      this.cityService.getCity(hero.city).subscribe((city) => {
-        city.heroes = city.heroes.filter((h) => h !== heroId);
+        return this.heroService.updateHero(hero);
+      })
+    );
 
-        this.cityService.updateCity(city).subscribe(() => {
-          hero.city = null;
-
-          this.heroService.updateHero(hero).subscribe(() => {
-            if (callback !== undefined) {
-              callback();
-            }
-          });
-        });
-      });
-    });
+    return removedHero;
   }
 
-  addHeroToCity(heroId: number, cityId: number, callback?: () => void): void {
-    this.heroService.getHero(heroId).subscribe((hero) => {
-      if (hero === undefined || hero.city !== null) {
-        if (callback !== undefined) {
-          callback();
+  addHeroToCity(
+    heroId: number,
+    cityId: number
+  ): Observable<Hero | null | undefined> {
+    const addHero = this.heroService.getHero(heroId).pipe(
+      concatMap((hero) => {
+        if (hero === undefined || hero === null) {
+          const ofReturn = of(hero);
+
+          return ofReturn;
         }
 
-        return;
-      }
+        hero.cityId = cityId;
+        return this.heroService.updateHero(hero);
+      })
+    );
 
-      this.cityService.getCity(cityId).subscribe((city) => {
-        city.heroes.push(heroId);
-
-        this.cityService.updateCity(city).subscribe(() => {
-          hero.city = cityId;
-
-          this.heroService.updateHero(hero).subscribe(() => {
-            if (callback !== undefined) {
-              callback();
-
-              return;
-            }
-          });
-        });
-      });
-    });
+    return addHero;
   }
 
-  updateHeroNoCity(cityId: number, callback?: () => void): void {
-    this.heroService.getHeroes().subscribe((heroes) => {
-      const heroesWithCity = heroes.filter((hero) => hero.city === cityId);
+  updateHeroNoCity(cityId: number): Observable<Hero[] | null> {
+    const updateHero = this.heroService.getHeroes().pipe(
+      concatMap((heroes) => {
+        if (heroes === null || heroes === undefined) {
+          const ofReturn = of(heroes);
 
-      heroesWithCity.forEach((hero) => {
-        hero.city = null;
+          return ofReturn;
+        }
 
-        this.heroService.updateHero(hero).subscribe(() => {
-          if (callback !== undefined) {
-            callback();
+        const heroesWithCity = heroes.filter((hero) => hero.cityId === cityId);
 
-            return;
-          }
+        const updateObservables = heroesWithCity.map((hero) => {
+          hero.cityId = null;
+
+          return this.heroService.updateHero(hero);
         });
-      });
-    });
+
+        if (updateObservables.length === 0) {
+          const ofReturn = of(heroes);
+
+          return ofReturn;
+        }
+
+        return forkJoin(updateObservables).pipe(map(() => heroes));
+      })
+    );
+
+    return updateHero;
   }
 }

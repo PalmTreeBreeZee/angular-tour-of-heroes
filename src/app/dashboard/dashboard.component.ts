@@ -4,19 +4,12 @@ import { HeroService } from '../hero.service';
 import { Hero } from '../hero';
 import { RouterLink } from '@angular/router';
 import { HeroSearchComponent } from '../hero-search/hero-search.component';
-import { CitiesComponent } from '../cities/cities.component';
 import { CitySearchComponent } from '../city-search/city-search.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [
-    NgFor,
-    RouterLink,
-    HeroSearchComponent,
-    CitiesComponent,
-    CitySearchComponent,
-  ],
+  imports: [NgFor, RouterLink, HeroSearchComponent, CitySearchComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
