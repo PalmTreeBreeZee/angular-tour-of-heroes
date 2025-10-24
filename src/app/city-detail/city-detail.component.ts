@@ -1,28 +1,29 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { City } from '../city';
 import { Hero } from '../hero';
-import { ActivatedRoute } from '@angular/router';
-import { HeroService } from '../hero.service';
-import { Location, NgFor, NgIf } from '@angular/common';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CityService } from '../city.service';
+import { HeroService } from '../hero.service';
+import { CityandheroService } from '../cityandhero.service';
 
 @Component({
   selector: 'app-city-detail',
   standalone: true,
-  imports: [NgFor, NgIf, FormsModule],
+  imports: [NgFor, NgIf, FormsModule, RouterLink],
   templateUrl: './city-detail.component.html',
   styleUrl: './city-detail.component.css',
 })
 export class CityDetailComponent implements OnInit {
   @Input() city?: City;
-  cities: City[] = [];
-  heroes: Hero[] = [];
-  hero?: Hero;
+  heroes?: Hero[];
 
   constructor(
     private route: ActivatedRoute,
-    private heroService: HeroService,
-    private location: Location
+    private cityService: CityService,
+    private cityAndHeroService: CityandheroService,
+    private heroService: HeroService
   ) {}
 
   ngOnInit() {
@@ -30,105 +31,49 @@ export class CityDetailComponent implements OnInit {
     this.getHeroes();
   }
 
-  getCity(cityId?: number): void {
+  getCity(): void {
     const param = this.route.snapshot.paramMap.get('id');
-    const id = Number(param);
+    const cityId = Number(param);
 
-    if (cityId === undefined) {
-      if (id === 0) {
-        return;
-      }
-
-      this.heroService.getCity(id).subscribe((city) => (this.city = city));
-    } else if (cityId !== undefined) {
-      this.heroService.getCity(cityId).subscribe((city) => (this.city = city));
-    }
-  }
-
-  saveCity(): void {
-    if (
-      this.city == undefined ||
-      this.city.name == null ||
-      this.city.name == ''
-    ) {
-      console.error('There is no City!!!');
-      return;
-    }
-
-    this.heroService.updateCityHeroes(this.city).subscribe(() => {
-      this.getCity();
-      this.getHeroes();
-    });
-  }
-
-  getHeroesByCity(cityId: number): Hero[] {
-    return this.heroes.filter((hero) => hero.city === cityId);
-  }
-
-  goBack(): void {
-    this.location.back();
+    this.cityService.getCity(cityId).subscribe((city) => (this.city = city));
   }
 
   getHeroes(): void {
     this.heroService.getHeroes().subscribe((heroes) => (this.heroes = heroes));
   }
 
-  getHeroesNotInCity(cityId: number): Hero[] {
-    return this.heroes.filter((hero) => hero.city !== cityId && !hero.city);
-  }
-
   removeHero(hero: Hero): void {
-    if (this.city === undefined || this.city.heroes === undefined) {
+    if (this.city === undefined) {
+      console.warn('There is no City');
       return;
     }
 
-    this.city.heroes = this.city.heroes.filter((id) => id !== hero.id);
-
-    if (hero === undefined) {
-      console.warn(`Hero with ID ${hero} not found`);
-      return;
-    }
-
-    hero.city = null;
-
-    this.heroService.updateHero(hero).subscribe({
-      next: () => {
-        this.heroService.updateCityHeroes(this.city!).subscribe({
-          next: () => {
-            this.getHeroes();
-            this.getCity();
-          },
-        });
-      },
+    this.cityAndHeroService.removeHeroFromCity(hero.id).subscribe(() => {
+      this.getHeroes();
     });
   }
 
   addHero(hero: Hero): void {
-    const param = this.route.snapshot.paramMap.get('id');
-    const id = Number(param);
-
-    if (hero === null || hero === undefined || hero.name === '') {
-      console.warn(`Hero with ID ${hero} not found`);
+    if (this.city === undefined) {
+      console.warn('There is no City');
       return;
     }
 
-    if (this.city === undefined || this.city.heroes === undefined) {
+    this.cityAndHeroService
+      .addHeroToCity(hero.id, this.city.id)
+      .subscribe(() => {
+        this.getHeroes();
+      });
+  }
+
+  saveCity(): void {
+    if (this.city === undefined) {
+      console.warn('There is not city');
       return;
     }
 
-    hero.city = id;
-
-    this.city.heroes.push(hero.id);
-
-    this.heroService.updateHero(hero).subscribe({
-      next: () => {
-        this.heroService.updateCityHeroes(this.city!).subscribe({
-          next: () => {
-            this.getCity();
-            this.getHeroes();
-          },
-        });
-      },
+    this.cityService.updateCity(this.city).subscribe(() => {
+      this.getCity();
     });
   }
 }

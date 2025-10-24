@@ -5,6 +5,7 @@ import { HeroService } from '../hero.service';
 import { HeroDetailComponent } from '../hero-detail/hero-detail.component';
 import { MessagesComponent } from '../messages/messages.component';
 import { RouterLink } from '@angular/router';
+import { CityandheroService } from '../cityandhero.service';
 
 @Component({
   selector: 'app-heroes',
@@ -24,7 +25,10 @@ export class HeroesComponent implements OnInit {
   heroes: Hero[] = [];
   selectedHero?: Hero;
 
-  constructor(private heroService: HeroService) {}
+  constructor(
+    private heroService: HeroService,
+    private cityAndHeroService: CityandheroService
+  ) {}
 
   ngOnInit(): void {
     this.getHeroes();
@@ -35,27 +39,28 @@ export class HeroesComponent implements OnInit {
   }
 
   onSelect(hero: Hero): void {
-    console.log(this.selectedHero);
     this.selectedHero = hero;
   }
 
   add(name: string): void {
-    if (name === undefined) {
+    if (name === undefined || name === null) {
       return;
     }
 
     name = name.trim();
 
-    this.heroService.addHero({ name } as Hero).subscribe((hero) => {
-      this.heroes.push(hero);
+    this.heroService.addHero(name).subscribe(() => {
       this.getHeroes();
     });
   }
 
   delete(hero: Hero): void {
-    this.heroService.deleteHero(hero.id).subscribe(() => {
-      this.selectedHero = undefined;
-      this.getHeroes();
+    this.cityAndHeroService.removeHeroFromCity(hero.id).subscribe(() => {
+      this.heroService.deleteHero(hero.id).subscribe(() => {
+        this.selectedHero = undefined;
+
+        this.getHeroes();
+      });
     });
   }
 }
