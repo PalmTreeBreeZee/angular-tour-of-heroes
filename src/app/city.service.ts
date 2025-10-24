@@ -9,7 +9,7 @@ import { City } from './city';
   providedIn: 'root',
 })
 export class CityService {
-  private citiesUrl = 'http://localhost:5272/api/Cities';
+  private citiesUrl = 'http://tohbackendapi.azure-api.net/api/Cities';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),

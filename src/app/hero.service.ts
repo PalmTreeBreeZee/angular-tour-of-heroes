@@ -9,7 +9,7 @@ import { catchError, tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class HeroService {
-  private heroesUrl = 'http://localhost:5272/api/Heroes';
+  private heroesUrl = 'http://tohbackendapi.azure-api.net/api/Heroes';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
