@@ -9,7 +9,7 @@ import { City } from './city';
   providedIn: 'root',
 })
 export class CityService {
-  private citiesUrl = 'http://localhost:5272/api/Cities';
+  private citiesUrl = 'api/cities';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -28,10 +28,7 @@ export class CityService {
     return (error: any): Observable<T> => {
       console.error(error);
       this.log(`${operation} failed: ${error.message}`);
-
-      const ofResult = of(result as T);
-
-      return ofResult;
+      return of(result as T);
     };
   }
 
@@ -68,6 +65,9 @@ export class CityService {
   addCity(name: string): Observable<City> {
     const city = { name } as City;
 
+    city.heroes = [];
+
+    //Change the name to city. This means a private variable or class property
     const cityObservable = this.http
       .post<City>(this.citiesUrl, city, this.httpOptions)
       .pipe(
@@ -78,11 +78,11 @@ export class CityService {
     return cityObservable;
   }
 
-  deleteCity(id: number): Observable<City> {
-    const url = `${this.citiesUrl}/${id}`;
+  deleteCity(city: City): Observable<City> {
+    const url = `${this.citiesUrl}/${city.id}`;
 
     const deletedCity = this.http.delete<City>(url, this.httpOptions).pipe(
-      tap((_) => this.log(`City at ${id} has been deleted`)),
+      tap((_) => this.log(`City at ${city.id} has been deleted`)),
       catchError(this.handleError<City>('deleteCity'))
     );
 
@@ -90,8 +90,6 @@ export class CityService {
   }
 
   searchCity(term: string): Observable<City[]> {
-    term = term.trim();
-
     if (term === null || term === undefined || term === '') {
       const ofReturn = of([]);
 

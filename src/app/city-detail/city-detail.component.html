@@ -1,10 +1,5 @@
 <div *ngIf="city != null">
-  <h2 style="display: flex; justify-content: center">
-    <a routerLink="/heroes">
-      {{ city.name }}
-    </a>
-    &nbsp;
-  </h2>
+  <h2 style="display: flex; justify-content: center">{{ city.name }} &nbsp;</h2>
 
   <div>
     <h3>Change City Name:</h3>
@@ -15,13 +10,13 @@
   <div>
     <h3>List of Heroes in {{ city.name }}:</h3>
     <div *ngFor="let hero of heroes">
-      <button *ngIf="hero.cityId === city.id" (click)="removeHero(hero)">
+      <button *ngIf="hero.city === city.id" (click)="removeHero(hero)">
         {{ hero.name }}
       </button>
     </div>
     <h3>List of Heroes not in {{ city.name }}:</h3>
     <div *ngFor="let hero of heroes">
-      <button *ngIf="hero.cityId === null" (click)="addHero(hero)">
+      <button *ngIf="hero.city === null" (click)="addHero(hero)">
         {{ hero.name }}
       </button>
     </div>

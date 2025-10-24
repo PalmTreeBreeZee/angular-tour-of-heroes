@@ -3,14 +3,14 @@ import { Hero } from '../hero';
 import { City } from '../city';
 import { Location, NgFor, NgIf, UpperCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { HeroService } from '../hero.service';
 import { CityService } from '../city.service';
 
 @Component({
   selector: 'app-hero-detail',
   standalone: true,
-  imports: [NgIf, UpperCasePipe, FormsModule, NgFor, RouterLink],
+  imports: [NgIf, UpperCasePipe, FormsModule, NgFor],
   templateUrl: './hero-detail.component.html',
   styleUrl: './hero-detail.component.css',
 })

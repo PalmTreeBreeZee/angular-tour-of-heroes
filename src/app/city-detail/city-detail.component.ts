@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { City } from '../city';
 import { Hero } from '../hero';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CityService } from '../city.service';
@@ -11,7 +11,7 @@ import { CityandheroService } from '../cityandhero.service';
 @Component({
   selector: 'app-city-detail',
   standalone: true,
-  imports: [NgFor, NgIf, FormsModule, RouterLink],
+  imports: [NgFor, NgIf, FormsModule],
   templateUrl: './city-detail.component.html',
   styleUrl: './city-detail.component.css',
 })
@@ -37,7 +37,6 @@ export class CityDetailComponent implements OnInit {
 
     this.cityService.getCity(cityId).subscribe((city) => (this.city = city));
   }
-
   getHeroes(): void {
     this.heroService.getHeroes().subscribe((heroes) => (this.heroes = heroes));
   }
@@ -48,7 +47,7 @@ export class CityDetailComponent implements OnInit {
       return;
     }
 
-    this.cityAndHeroService.removeHeroFromCity(hero.id).subscribe(() => {
+    this.cityAndHeroService.removeHeroFromCity(hero.id, () => {
       this.getHeroes();
     });
   }
@@ -59,11 +58,9 @@ export class CityDetailComponent implements OnInit {
       return;
     }
 
-    this.cityAndHeroService
-      .addHeroToCity(hero.id, this.city.id)
-      .subscribe(() => {
-        this.getHeroes();
-      });
+    this.cityAndHeroService.addHeroToCity(hero.id, this.city.id, () => {
+      this.getHeroes();
+    });
   }
 
   saveCity(): void {

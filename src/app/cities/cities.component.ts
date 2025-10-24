@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { City } from '../city';
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CityService } from '../city.service';
 import { CityandheroService } from '../cityandhero.service';
@@ -8,7 +8,7 @@ import { CityandheroService } from '../cityandhero.service';
 @Component({
   selector: 'app-cities',
   standalone: true,
-  imports: [NgFor, RouterLink],
+  imports: [NgFor, NgIf, RouterLink],
   templateUrl: './cities.component.html',
   styleUrl: './cities.component.css',
 })
@@ -42,8 +42,8 @@ export class CitiesComponent implements OnInit {
   removeCity(city: City): void {
     const cityId = city.id;
 
-    this.cityAndHeroService.updateHeroNoCity(cityId).subscribe(() => {
-      this.cityService.deleteCity(city.id).subscribe(() => {
+    this.cityService.deleteCity(city).subscribe(() => {
+      this.cityAndHeroService.updateHeroNoCity(cityId, () => {
         this.getCities();
       });
     });
