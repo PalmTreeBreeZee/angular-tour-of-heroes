@@ -10,8 +10,12 @@ import { catchError, tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class HeroService {
+<<<<<<< Updated upstream
   private heroesUrl = 'api/heroes';
   private citiesUrl = 'api/cities';
+=======
+  private heroesUrl = 'http://tohbackendapi.azure-api.net/api/Heroes';
+>>>>>>> Stashed changes
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
