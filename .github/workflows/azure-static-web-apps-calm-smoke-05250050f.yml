@@ -19,6 +19,16 @@ jobs:
         with:
           submodules: true
           lfs: false
+    
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install and Build Angular App
+        run: |
+          npm ci
+          npm build --if-present
           
       - name: Build And Deploy
         id: builddeploy
@@ -45,6 +55,7 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_CALM_SMOKE_05250050F }}
           action: "close"
+
 
 
 
