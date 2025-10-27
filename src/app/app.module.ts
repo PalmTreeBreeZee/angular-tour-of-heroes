@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -12,6 +12,9 @@ import { HttpClientModule } from '@angular/common/http';
     CommonModule,
     RouterLink,
     HttpClientModule,
+  ],
+  providers: [
+    provideHttpClient(withFetch())
   ],
   declarations: [],
   bootstrap: [],
